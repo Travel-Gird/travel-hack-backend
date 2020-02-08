@@ -16,8 +16,10 @@ class Facebook:
     def get_images_from_posts(self, posts):
         image_ids = [post['id'] for post in posts]
         images_data = self.graph.get_objects(ids=image_ids,
-                                             fields='full_picture, picture')
-        images_urls = [image_data['full_picture'] for image_data in images_data]
+                                             fields='full_picture')
+        images_urls = [image_data['full_picture']
+                       for _, image_data in images_data.items()
+                       if 'full_picture' in image_data]
         return images_urls
 
 

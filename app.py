@@ -4,8 +4,8 @@ import db
 
 def generate_route(places_data: list) -> dict:
     hours = 8
-    route_data = {'image': 'https://s0.rbk.ru/v6_top_pics/media/img/7/59/755060771782597.jpg',
-                  'cityName': 'San Francisco',
+    route_data = {'image': 'https://www.visittheusa.com/sites/default/files/styles/hero_m_1300x700/public/2017-10/8cd6053c1e15b9054eb0114f63fbc51c.jpeg?itok=q3ghTX27',
+                  'cityName': 'Route 1',
                   'timeTable': []}
     timeline = []
     for place_id in places_data:
@@ -13,8 +13,8 @@ def generate_route(places_data: list) -> dict:
         route_chunk = {'time': f'{str(hours)}:00',
                        'place': place_data['title'],
                        'description': place_data['description'],
-                       'latitude': place_data['latitude'],
-                       'longitude': place_data['longitude']}
+                       'latitude': str(place_data['latitude']),
+                       'longitude': str(place_data['longitude'])}
         route_data['timeTable'].append(route_chunk)
         timeline.append({'place_id': int(place_id),
                          'time': f'{str(hours)}:00'})

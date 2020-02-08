@@ -20,10 +20,9 @@ def get_routes_endpoint():
         response_data = app.generate_route(places_data=request_data.getlist('sightsigns'))
         return jsonify({'routes': [response_data]}), 200
     elif request.method == 'POST':
-        request_data = request.json()
+        request_data = request.json
         app.rate_route(user_facebook_id=request_data['userId'],
-                       route_id=request_data['routeId'],
-                       rate=request_data['rate'])
+                       route_id=request_data['routeId'])
         return '', 201
 
 

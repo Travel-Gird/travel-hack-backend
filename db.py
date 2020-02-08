@@ -56,7 +56,7 @@ def save_route_to_db(timeline: list):
     return record_id
 
 
-def rate_route_in_db(user_facebook_id: int, route_id: int, rate: int):
+def rate_route_in_db(user_facebook_id: int, route_id: int):
     conn = psycopg2.connect(dbname=config.DB_NAME,
                             user=config.DB_USER,
                             password=config.DB_PASSWORD,
@@ -64,7 +64,7 @@ def rate_route_in_db(user_facebook_id: int, route_id: int, rate: int):
                             port=config.DB_PORT,
                             cursor_factory=RealDictCursor)
     with conn.cursor() as cursor:
-        cursor.execute(f'UPDATE rates SET (user_facebook_id={str(user_facebook_id)}, rate={str(rate)}) WHERE route_id = {str(route_id)}')
+        cursor.execute(f"INSERT INTO rates (user_facebook_id, route_id) VALUES ({str(user_facebook_id)}, {str(route_id)})")
         conn.commit()
 
 

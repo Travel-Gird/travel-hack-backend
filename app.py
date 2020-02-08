@@ -22,10 +22,9 @@ def generate_route(places_data: list) -> dict:
     return route_data
 
 
-def rate_route(user_facebook_id: int, route_id: int, rate: int):
+def rate_route(user_facebook_id: int, route_id: int):
     db.rate_route_in_db(user_facebook_id=user_facebook_id,
-                        route_id=route_id,
-                        rate=rate)
+                        route_id=route_id)
 
 
 def recommend_routes(user_data: dict) -> dict:

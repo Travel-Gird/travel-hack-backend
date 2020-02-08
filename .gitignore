@@ -133,3 +133,6 @@ dmypy.json
 
 # Local config
 local_config.py
+
+# DS_Store
+.DS_Store

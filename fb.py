@@ -9,11 +9,18 @@ class Facebook:
         self.graph = facebook.GraphAPI(access_token=access_token)
         self.user_id = user_id
 
-    def get_posts(self):
+    def get_user_full_info(self) -> dict:
+        posts = self.get_posts()
+        images = self.get_images_from_posts(posts)
+        return {'id': self.user_id,
+                'posts': posts,
+                'images': images}
+
+    def get_posts(self) -> list:
         posts = self.graph.get_connections(self.user_id, 'posts')
         return posts['data']
 
-    def get_images_from_posts(self, posts):
+    def get_images_from_posts(self, posts: list) -> list:
         image_ids = [post['id'] for post in posts]
         images_data = self.graph.get_objects(ids=image_ids,
                                              fields='full_picture')

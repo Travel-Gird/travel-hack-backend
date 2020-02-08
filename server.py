@@ -8,9 +8,9 @@ import config
 server = Flask(__name__)
 
 
-@server.route('/places', methods=['GET'])
+@server.route('/sightsigns', methods=['GET'])
 def get_places_endpoint():
-    return jsonify({'places': db.get_places_from_db()}), 200
+    return jsonify({'sightsigns': db.get_places_from_db()}), 200
 
 
 @server.route('/routes', methods=['GET'])

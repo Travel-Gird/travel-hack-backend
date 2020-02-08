@@ -1,13 +1,30 @@
 import requests
 import facebook
 
+import db
 import config
 
 
 class Facebook:
+    fields = ['education',
+              'birthday',
+              'favorite_athletes',
+              'favorite_teams',
+              'gender',
+              'hometown',
+              'location',
+              'sports',
+              'posts']
+
     def __init__(self, access_token: str, user_id: str):
         self.graph = facebook.GraphAPI(access_token=access_token)
         self.user_id = user_id
+
+    def get_user_info(self):
+        fields = ','.join(field for field in self.fields)
+        user_info = self.graph.get_object(id='me',
+                                          fields=fields)
+        return user_info
 
     def get_user_full_info(self) -> dict:
         posts = self.get_posts()
@@ -37,3 +54,7 @@ if __name__ == '__main__':
     print(fb_posts)
     fb_images = fb.get_images_from_posts(fb_posts)
     print(fb_images)
+    fb_user_info = fb.get_user_info()
+    print('\n')
+    print('User info')
+    print(fb_user_info)

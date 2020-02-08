@@ -1,4 +1,4 @@
 try:
-    import local_config
+    from local_config import *
 except ImportError:
-    import prod_config
+    from prod_config import *

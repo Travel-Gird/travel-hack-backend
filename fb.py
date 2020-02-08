@@ -1,6 +1,8 @@
 import requests
 import facebook
 
+import config
+
 
 class Facebook:
     def __init__(self, access_token, user_id):
@@ -11,16 +13,18 @@ class Facebook:
         posts = self.graph.get_connections(self.user_id, 'posts')
         return posts['data']
 
-    def _get_images_from_posts(self, posts):
-        images = []
-        for post in posts:
-            image_data = self.graph.get_object(id=post['id'],
-                                               fields='full_picture, picture')
-            image_url = image_data['data']['full_picture']
-            images.append(image_url)
+    def get_images_from_posts(self, posts):
+        image_ids = [post['id'] for post in posts]
+        images_data = self.graph.get_objects(ids=image_ids,
+                                             fields='full_picture, picture')
+        images_urls = [image_data['full_picture'] for image_data in images_data]
+        return images_urls
 
-    def _download_image(self, image_url):
-        pass
 
-    def _save_images(self, images):
-        pass
+if __name__ == '__main__':
+    fb = Facebook(access_token=config.TEST_USER_FB_ACCESS_TOKEN,
+                  user_id=config.TEST_USER_FB_ID)
+    fb_posts = fb.get_posts()
+    print(fb_posts)
+    fb_images = fb.get_images_from_posts(fb_posts)
+    print(fb_images)

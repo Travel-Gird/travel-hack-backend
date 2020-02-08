@@ -12,9 +12,9 @@ def generate_route(places_data: list) -> dict:
         place_data = db.get_place_from_db(place_id)
         route_chunk = {'time': f'{str(hours)}:00',
                        'place': place_data['title'],
-                       'placeImage': place_data['image']}
+                       'description': place_data['description']}
         route_data['timeTable'].append(route_chunk)
-        hours += place_data['time_shift']
+        hours += place_data['time_shift'] + 1
     return route_data
 
 

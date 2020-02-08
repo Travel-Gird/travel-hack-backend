@@ -13,10 +13,14 @@ def get_places_endpoint():
     return jsonify({'sightsigns': db.get_places_from_db()}), 200
 
 
-@server.route('/routes', methods=['GET'])
+@server.route('/routes', methods=['GET', 'POST'])
 def get_routes_endpoint():
-    request_data = request.args
-    response_data = app.generate_route(places_data=request_data.getlist('sightsigns'))
+    response_data = {}
+    if request.method == 'GET':
+        request_data = request.args
+        response_data = app.generate_route(places_data=request_data.getlist('sightsigns'))
+    elif request.method == 'POST':
+        response_data = None
     return jsonify({'routes': response_data}), 200
 
 

@@ -6,7 +6,7 @@ from psycopg2.extras import RealDictCursor
 import config
 
 
-def get_places_from_db():
+def get_places_from_db(city_name: str):
     conn = psycopg2.connect(dbname=config.DB_NAME,
                             user=config.DB_USER,
                             password=config.DB_PASSWORD,
@@ -14,7 +14,7 @@ def get_places_from_db():
                             port=config.DB_PORT,
                             cursor_factory=RealDictCursor)
     with conn.cursor() as cursor:
-        cursor.execute('SELECT * FROM places')
+        cursor.execute(f'SELECT * FROM places WHERE city_id = {config.CITIES[city_name]}')
         records = cursor.fetchall()
     places = []
     for record in records:

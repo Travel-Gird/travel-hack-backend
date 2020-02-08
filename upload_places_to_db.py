@@ -28,6 +28,7 @@ def upload_places_to_db(places_data):
             for place_data in places:
                 title = place_data[0].replace("'", "''")
                 image = place_data[3].replace("'", "''")
+                image = image.replace('maxwidth=1080', 'maxwidth=480')
                 description = place_data[2].replace("'", "''")
                 cursor.execute(
                     f"INSERT INTO places "

@@ -4,18 +4,30 @@ import db
 
 def generate_route(places_data: list) -> dict:
     hours = 8
-    route_data = {'id': 1,
-                  'image': 'https://s0.rbk.ru/v6_top_pics/media/img/7/59/755060771782597.jpg',
+    route_data = {'image': 'https://s0.rbk.ru/v6_top_pics/media/img/7/59/755060771782597.jpg',
                   'cityName': 'San Francisco',
                   'timeTable': []}
+    timeline = []
     for place_id in places_data:
         place_data = db.get_place_from_db(place_id)
         route_chunk = {'time': f'{str(hours)}:00',
                        'place': place_data['title'],
                        'description': place_data['description']}
         route_data['timeTable'].append(route_chunk)
+        timeline.append({'place_id': int(place_id),
+                         'hours': f'{str(hours)}:00'})
         hours += place_data['time_shift'] + 1
+    # route_id = db.save_route_to_db(timeline)
+    # route_data.update({'id': str(route_id)})
     return route_data
+
+
+def save_route(user_id: int, route_data: dict):
+    pass
+
+
+def rate_route(user_id: int, route_id: int):
+    pass
 
 
 def recommend_routes(user_data: dict) -> dict:

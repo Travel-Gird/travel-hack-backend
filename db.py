@@ -1,3 +1,5 @@
+import json
+
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -35,8 +37,22 @@ def get_place_from_db(place_id: int or str) -> dict:
         record = cursor.fetchall()
     return {'id': str(record[0]['id']),
             'title': record[0]['title'],
-            'image': record[0]['image'],
+            'description': record[0]['description'],
             'time_shift': record[0]['time_shift']}
+
+
+def save_route_to_db(timeline: list):
+    conn = psycopg2.connect(dbname=config.DB_NAME,
+                            user=config.DB_USER,
+                            password=config.DB_PASSWORD,
+                            host=config.DB_HOST,
+                            port=config.DB_PORT,
+                            cursor_factory=RealDictCursor)
+    with conn.cursor() as cursor:
+        timeline = json.dumps(timeline)
+        cursor.execute(f'INSERT INTO routes (timeline) VALUES (\'{timeline}\') RETURNING id')
+        record_id = cursor.fetchone()[0]
+    return record_id
 
 
 if __name__ == '__main__':

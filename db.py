@@ -1,15 +1,15 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-import local_config
+import config
 
 
 def get_places_from_db():
-    conn = psycopg2.connect(dbname=local_config.DB_NAME,
-                            user=local_config.DB_USER,
-                            password=local_config.DB_PASSWORD,
-                            host=local_config.DB_HOST,
-                            port=local_config.DB_PORT,
+    conn = psycopg2.connect(dbname=config.DB_NAME,
+                            user=config.DB_USER,
+                            password=config.DB_PASSWORD,
+                            host=config.DB_HOST,
+                            port=config.DB_PORT,
                             cursor_factory=RealDictCursor)
     with conn.cursor() as cursor:
         cursor.execute('SELECT * FROM places')

@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 import app
 import db
-import local_config
+import config
 
 
 server = Flask(__name__)
@@ -28,6 +28,6 @@ def get_recommended_routes_endpoint():
 
 
 if __name__ == '__main__':
-    server.run(host=local_config.HOST,
-               port=local_config.PORT,
+    server.run(host=config.HOST,
+               port=config.PORT,
                debug=True)

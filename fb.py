@@ -1,7 +1,7 @@
 import requests
 import facebook
 
-import local_config
+import config
 
 
 class Facebook:
@@ -31,8 +31,8 @@ class Facebook:
 
 
 if __name__ == '__main__':
-    fb = Facebook(access_token=local_config.TEST_USER_FB_ACCESS_TOKEN,
-                  user_id=local_config.TEST_USER_FB_ID)
+    fb = Facebook(access_token=config.TEST_USER_FB_ACCESS_TOKEN,
+                  user_id=config.TEST_USER_FB_ID)
     fb_posts = fb.get_posts()
     print(fb_posts)
     fb_images = fb.get_images_from_posts(fb_posts)

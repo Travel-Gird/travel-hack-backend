@@ -18,7 +18,8 @@ def get_places_from_db():
     for record in records:
         places.append({'id': str(record['id']),
                        'title': str(record['title']),
-                       'image': str(record['image'])})
+                       'image': str(record['image']),
+                       'timeShift': str(record['time_shift'])})
     return places
 
 

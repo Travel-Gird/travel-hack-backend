@@ -50,9 +50,22 @@ def save_route_to_db(timeline: list):
                             cursor_factory=RealDictCursor)
     with conn.cursor() as cursor:
         timeline = json.dumps(timeline)
-        cursor.execute(f'INSERT INTO routes (timeline) VALUES (\'{timeline}\') RETURNING id')
-        record_id = cursor.fetchone()[0]
+        cursor.execute(f"INSERT INTO routes (timeline) VALUES ('{timeline}') RETURNING id")
+        conn.commit()
+        record_id = cursor.fetchone()['id']
     return record_id
+
+
+def rate_route_in_db(user_facebook_id: int, route_id: int, rate: int):
+    conn = psycopg2.connect(dbname=config.DB_NAME,
+                            user=config.DB_USER,
+                            password=config.DB_PASSWORD,
+                            host=config.DB_HOST,
+                            port=config.DB_PORT,
+                            cursor_factory=RealDictCursor)
+    with conn.cursor() as cursor:
+        cursor.execute(f'UPDATE rates SET (user_facebook_id={str(user_facebook_id)}, rate={str(rate)}) WHERE route_id = {str(route_id)}')
+        conn.commit()
 
 
 if __name__ == '__main__':

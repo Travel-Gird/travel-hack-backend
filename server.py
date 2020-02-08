@@ -15,13 +15,16 @@ def get_places_endpoint():
 
 @server.route('/routes', methods=['GET', 'POST'])
 def get_routes_endpoint():
-    response_data = {}
     if request.method == 'GET':
         request_data = request.args
         response_data = app.generate_route(places_data=request_data.getlist('sightsigns'))
+        return jsonify({'routes': [response_data]}), 200
     elif request.method == 'POST':
-        response_data = None
-    return jsonify({'routes': response_data}), 200
+        request_data = request.json()
+        app.rate_route(user_facebook_id=request_data['userId'],
+                       route_id=request_data['routeId'],
+                       rate=request_data['rate'])
+        return '', 201
 
 
 @server.route('/recommended_routes', methods=['GET'])

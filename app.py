@@ -15,19 +15,17 @@ def generate_route(places_data: list) -> dict:
                        'description': place_data['description']}
         route_data['timeTable'].append(route_chunk)
         timeline.append({'place_id': int(place_id),
-                         'hours': f'{str(hours)}:00'})
+                         'time': f'{str(hours)}:00'})
         hours += place_data['time_shift'] + 1
-    # route_id = db.save_route_to_db(timeline)
-    # route_data.update({'id': str(route_id)})
+    route_id = db.save_route_to_db(timeline)
+    route_data.update({'id': str(route_id)})
     return route_data
 
 
-def save_route(user_id: int, route_data: dict):
-    pass
-
-
-def rate_route(user_id: int, route_id: int):
-    pass
+def rate_route(user_facebook_id: int, route_id: int, rate: int):
+    db.rate_route_in_db(user_facebook_id=user_facebook_id,
+                        route_id=route_id,
+                        rate=rate)
 
 
 def recommend_routes(user_data: dict) -> dict:

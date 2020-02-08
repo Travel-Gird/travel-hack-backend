@@ -5,7 +5,7 @@ import config
 
 
 class Facebook:
-    def __init__(self, access_token, user_id):
+    def __init__(self, access_token: str, user_id: str):
         self.graph = facebook.GraphAPI(access_token=access_token)
         self.user_id = user_id
 

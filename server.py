@@ -16,7 +16,7 @@ def get_places_endpoint():
 @server.route('/routes', methods=['GET'])
 def get_routes_endpoint():
     request_data = request.args
-    response_data = app.generate_routes(user_data=request_data)
+    response_data = app.generate_route(places_data=request_data.getlist('sightsigns'))
     return jsonify({'routes': response_data}), 200
 
 

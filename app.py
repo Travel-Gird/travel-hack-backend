@@ -1,19 +1,20 @@
 import fb
+import db
 
 
-def generate_routes(user_data: dict) -> dict:
-    route_timestamp = 1581321600
-    timestamp_shift = 60 * 24 * 24 / len(user_data['places'])
-    route_data = {'image': 'https://s0.rbk.ru/v6_top_pics/media/img/7/59/755060771782597.jpg',
+def generate_route(places_data: list) -> dict:
+    hours = 8
+    route_data = {'id': 1,
+                  'image': 'https://s0.rbk.ru/v6_top_pics/media/img/7/59/755060771782597.jpg',
                   'cityName': 'San Francisco',
                   'timeTable': []}
-    for place_id in user_data['places']:
-        place_data = place_id
-        route_chunk = {'time': str(route_timestamp),
-                       'place': 'Golden Gate Bridge',
-                       'placeImage': 'https://top10.travel/wp-content/uploads/2017/02/most-zolotye-vorota.jpg'}
+    for place_id in places_data:
+        place_data = db.get_place_from_db(place_id)
+        route_chunk = {'time': f'{str(hours)}:00',
+                       'place': place_data['title'],
+                       'placeImage': place_data['image']}
         route_data['timeTable'].append(route_chunk)
-        route_timestamp += timestamp_shift
+        hours += place_data['time_shift']
     return route_data
 
 

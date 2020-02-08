@@ -15,6 +15,6 @@ def get_routes_endpoint():
 
 
 if __name__ == '__main__':
-    server.run(host='0.0.0.0',
+    server.run(host=config.HOST,
                port=config.PORT,
                debug=True)

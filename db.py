@@ -38,7 +38,9 @@ def get_place_from_db(place_id: int or str) -> dict:
     return {'id': str(record[0]['id']),
             'title': record[0]['title'],
             'description': record[0]['description'],
-            'time_shift': record[0]['time_shift']}
+            'time_shift': record[0]['time_shift'],
+            'latitude': record[0]['latitude'],
+            'longitude': record[0]['longitude']}
 
 
 def save_route_to_db(timeline: list):

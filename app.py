@@ -12,7 +12,9 @@ def generate_route(places_data: list) -> dict:
         place_data = db.get_place_from_db(place_id)
         route_chunk = {'time': f'{str(hours)}:00',
                        'place': place_data['title'],
-                       'description': place_data['description']}
+                       'description': place_data['description'],
+                       'latitude': place_data['latitude'],
+                       'longitude': place_data['longitude']}
         route_data['timeTable'].append(route_chunk)
         timeline.append({'place_id': int(place_id),
                          'time': f'{str(hours)}:00'})

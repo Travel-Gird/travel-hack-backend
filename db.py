@@ -70,6 +70,21 @@ def rate_route_in_db(user_facebook_id: int, route_id: int):
         conn.commit()
 
 
+def save_user_to_db(user_data: dict):
+    conn = psycopg2.connect(dbname=config.DB_NAME,
+                            user=config.DB_USER,
+                            password=config.DB_PASSWORD,
+                            host=config.DB_HOST,
+                            port=config.DB_PORT,
+                            cursor_factory=RealDictCursor)
+    with conn.cursor() as cursor:
+        cursor.execute(
+            f"INSERT INTO users (user_facebook_id, age, gender, location) "
+            f"VALUES ({str(user_data['id'])}, {str(user_data['age'])}, {str(user_data['gender'])},"
+            f"{str(user_data['location'])})")
+        conn.commit()
+
+
 if __name__ == '__main__':
     print(get_places_from_db())
     print(get_place_from_db(1))

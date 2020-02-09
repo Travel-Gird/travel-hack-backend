@@ -1,9 +1,8 @@
 from flask import Flask, request, jsonify
 
-import app
+import routes
 import db
 import config
-
 
 server = Flask(__name__)
 
@@ -18,19 +17,21 @@ def get_places_endpoint():
 def get_routes_endpoint():
     if request.method == 'GET':
         request_data = request.args
-        response_data = app.generate_route(places_data=request_data.getlist('sightsigns'))
-        return jsonify({'routes': [response_data]}), 200
+        response_data = routes.generate_routes(user_id=request_data['userId'],
+                                               access_token=request_data['token'],
+                                               places_data=request_data.getlist('sightsigns'))
+        return jsonify({'routes': response_data}), 200
     elif request.method == 'POST':
         request_data = request.json
-        app.rate_route(user_facebook_id=request_data['userId'],
-                       route_id=request_data['routeId'])
+        routes.rate_route(user_facebook_id=request_data['userId'],
+                          route_id=request_data['routeId'])
         return '', 201
 
 
 @server.route('/recommended_routes', methods=['GET'])
 def get_recommended_routes_endpoint():
     request_data = request.args
-    response_data = app.recommend_routes(user_data=request_data)
+    response_data = routes.recommend_routes(user_data=request_data)
     return jsonify({'recommended_routes': response_data}), 200
 
 

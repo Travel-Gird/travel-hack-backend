@@ -1,20 +1,13 @@
-import requests
 import facebook
 
-import db
+import utils
 import config
 
 
 class Facebook:
-    fields = ['education',
-              'birthday',
-              'favorite_athletes',
-              'favorite_teams',
+    fields = ['birthday',
               'gender',
-              'hometown',
-              'location',
-              'sports',
-              'posts']
+              'location']
 
     def __init__(self, access_token: str, user_id: str):
         self.graph = facebook.GraphAPI(access_token=access_token)
@@ -24,7 +17,11 @@ class Facebook:
         fields = ','.join(field for field in self.fields)
         user_info = self.graph.get_object(id='me',
                                           fields=fields)
-        return user_info
+        user_data = {'age': utils.birthday_to_age(user_info['birthday']),
+                     'gender': 1 if user_info['gender'] == 'male' else 0,
+                     'location': user_info['location']['id'],
+                     'id': user_info['id']}
+        return user_data
 
     def get_user_full_info(self) -> dict:
         posts = self.get_posts()

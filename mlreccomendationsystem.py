@@ -43,9 +43,8 @@ class MLPlaceRecommendation:
         """
         :param config: type(string) .yaml file with parameters for model
         """
-        self.root_path = '.'
-        # config_path = os.path.join(self.root_path, config)
-        config_path = 'config.yaml'
+        self.root_path = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+        config_path = os.path.join(self.root_path, config)
         print(config_path)
         self.__config = self.config_load(config_path)
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')

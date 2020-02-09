@@ -54,8 +54,9 @@ def recommend_routes(user_data: dict) -> list:
         route_data = {'image': route_images[i],
                       'cityName': f'Route #{str(i + 1)}',
                       'timeTable': []}
-        for time, place_id in route_from_db['timeline'].items():
-            place_data = db.get_place_from_db(place_id)
+        for chunk in route_from_db['timeline']:
+            time = chunk['time']
+            place_data = db.get_place_from_db(chunk['place_id'])
             route_chunk = {'time': time,
                            'place': place_data['title'],
                            'description': place_data['description'],

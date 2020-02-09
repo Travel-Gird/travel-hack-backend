@@ -4,13 +4,20 @@ import fb
 import db
 
 
+route_images = ['https://www.visittheusa.com/sites/default/files/styles/hero_m_1300x700/public/2017-10/8cd6053c1e15b9054eb0114f63fbc51c.jpeg?itok=q3ghTX27',
+                'https://i.pinimg.com/originals/01/e8/1a/01e81a35e0d119aed42d2fb15ae6d7e5.jpg',
+                'https://mandruy.com/wp-content/uploads/2019/10/Old-town-at-the-Obermarkt-in-the-historical-old-town-of-city-768x367.jpg',
+                'https://apn-nn.com/upload/iblock/8fc/8fc771bebbd74db1ca0c670b55d90bb1.jpg',
+                'https://discoverportugal.ru/images/stay/porto-bairros/ribeira.jpg']
+
+
 def generate_routes(user_id: str, access_token: str, places_data: list) -> list:
     routes = []
     for i in range(0, 5):
         random.shuffle(places_data)
         hours = 8
-        route_data = {'image': 'https://www.visittheusa.com/sites/default/files/styles/hero_m_1300x700/public/2017-10/8cd6053c1e15b9054eb0114f63fbc51c.jpeg?itok=q3ghTX27',
-                      'cityName': f'Route #{str(i)}',
+        route_data = {'image': route_images[i],
+                      'cityName': f'Route #{str(i + 1)}',
                       'timeTable': []}
         timeline = []
         for place_id in places_data:

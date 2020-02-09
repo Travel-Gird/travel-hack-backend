@@ -75,16 +75,16 @@ def save_user_to_db(user_fb_id: str,
 
 def get_data_for_study():
     with connection().cursor() as cursor:
-        cursor.execute('SELECT u.user_facebook_id, age, gender, location, '
-                       'route_id FROM users u '
-                       'LEFT JOIN (SELECT * FROM rates) r '
-                       'ON r.user_facebook_id = u.user_facebook_id')
+        cursor.execute('SELECT u.user_facebook_id, age, gender, location, ro.id, '
+                       'CASE WHEN ra.id IS NOT NULL THEN 1 ELSE 0 END AS like FROM '
+                       'users u LEFT JOIN routes ro ON true '
+                       'LEFT JOIN rates ra ON ra.route_id = ro.id')
         records = cursor.fetchall()
         data_for_study = [list(record) for record in records]
         return data_for_study
 
 
 if __name__ == '__main__':
-    print(get_places_from_db())
-    print(get_place_from_db(1))
+    # print(get_places_from_db())
+    # print(get_place_from_db(1))
     print(get_data_for_study())

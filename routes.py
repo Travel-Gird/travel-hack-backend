@@ -1,7 +1,7 @@
 import random
 
-import fb
 import db
+import config
 from mlreccomendationsystem import MLPlaceRecommendation
 
 
@@ -13,7 +13,7 @@ route_images = ['https://www.visittheusa.com/sites/default/files/styles/hero_m_1
 predictor = MLPlaceRecommendation()
 
 
-def generate_routes(places_data: list) -> list:
+def generate_routes(city_id: int, places_data: list) -> list:
     routes = []
     for i in range(0, 5):
         random.shuffle(places_data)
@@ -34,7 +34,7 @@ def generate_routes(places_data: list) -> list:
             timeline.append({'place_id': int(place_id),
                              'time': f'{str(hours)}:00'})
             hours += place_data['time_shift'] + 1
-        route_id = db.save_route_to_db(timeline)
+        route_id = db.save_route_to_db(timeline, city_id)
         route_data.update({'id': str(route_id)})
         routes.append(route_data)
     return routes
@@ -47,7 +47,10 @@ def rate_route(user_facebook_id: int, route_id: int):
 
 def recommend_routes(user_data: dict) -> list:
     random.shuffle(route_images)
-    data_for_predict = db.get_data_for_predict(user_data['userId'])
+    data_for_predict = db.get_data_for_predict(
+        user_facebook_id=user_data['userId'],
+        city_id=config.CITIES[user_data['country']]
+    )
     predict_data = predictor.predict(data_for_predict)
     routes = []
     i = 0

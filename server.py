@@ -20,6 +20,7 @@ def get_routes_endpoint():
     if request.method == 'GET':
         request_data = request.args
         response_data = routes.generate_routes(
+            city_id=config.CITIES[request_data['country']],
             places_data=request_data.getlist('sightsigns')
         )
         fb.create_fb_user(user_id=request_data['userId'],

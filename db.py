@@ -42,11 +42,11 @@ def get_place_from_db(place_id: int or str) -> dict:
             'longitude': record[0]['longitude']}
 
 
-def save_route_to_db(timeline: list) -> int:
+def save_route_to_db(timeline: list, city_id: int) -> int:
     with connection().cursor(cursor_factory=RealDictCursor) as cursor:
         timeline = json.dumps(timeline)
-        cursor.execute(f"INSERT INTO routes (timeline) "
-                       f"VALUES ('{timeline}') RETURNING id")
+        cursor.execute(f"INSERT INTO routes (timeline, city_id) "
+                       f"VALUES ('{timeline}', {city_id}) RETURNING id")
         record_id = cursor.fetchone()['id']
     return record_id
 
@@ -91,12 +91,13 @@ def get_data_for_study():
         return data_for_study
 
 
-def get_data_for_predict(user_facebook_id: str):
+def get_data_for_predict(user_facebook_id: str, city_id: int):
     with connection().cursor() as cursor:
         cursor.execute(f'SELECT u.user_facebook_id, age, gender, location, ro.id '
                        f'FROM users u LEFT JOIN routes ro ON true '
                        f'LEFT JOIN rates ra ON ra.route_id = ro.id '
-                       f'WHERE u.user_facebook_id = {user_facebook_id}')
+                       f'WHERE u.user_facebook_id = {user_facebook_id} '
+                       f'AND city_id = {city_id}')
         records = cursor.fetchall()
         data_for_predict = [list(record) for record in records]
         return data_for_predict

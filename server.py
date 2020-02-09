@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 
 import routes
 import db
+import fb
 import config
 
 server = Flask(__name__)
@@ -10,18 +11,21 @@ server = Flask(__name__)
 @server.route('/sightsigns', methods=['GET'])
 def get_places_endpoint():
     request_data = request.args
-    return jsonify({'sightsigns': db.get_places_from_db(request_data['country'])}), 200
+    places = db.get_places_from_db(city_name=request_data['country'])
+    return jsonify({'sightsigns': places}), 200
 
 
 @server.route('/routes', methods=['GET', 'POST'])
 def get_routes_endpoint():
     if request.method == 'GET':
         request_data = request.args
-        response_data = routes.generate_routes(user_id=request_data['userId'],
-                                               access_token=request_data['token'],
-                                               places_data=request_data.getlist('sightsigns'),
-                                               budget=request_data['budjet'],
-                                               activity=request_data['activity'])
+        response_data = routes.generate_routes(
+            places_data=request_data.getlist('sightsigns')
+        )
+        fb.create_fb_user(user_id=request_data['userId'],
+                          access_token=request_data['token'],
+                          budget=request_data['budjet'],
+                          activity=request_data['activity'])
         return jsonify({'routes': response_data}), 200
     elif request.method == 'POST':
         request_data = request.json

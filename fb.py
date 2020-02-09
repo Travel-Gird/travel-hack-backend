@@ -1,7 +1,24 @@
 import facebook
 
+import db
 import utils
 import config
+
+
+def create_fb_user(user_id: str,
+                   access_token: str,
+                   budget: int,
+                   activity: int):
+    user_fb = Facebook(user_id=user_id,
+                       access_token=access_token)
+    user_fb_data = user_fb.get_user_info()
+    if user_fb_data is not None:
+        db.save_user_to_db(user_fb_id=user_fb_data['id'],
+                           age=user_fb_data['age'],
+                           gender=user_fb_data['gender'],
+                           location=user_fb_data['location'],
+                           budget=config.BUDGETS[budget],
+                           activity=config.ACTIVITIES[activity])
 
 
 class Facebook:
@@ -13,15 +30,18 @@ class Facebook:
         self.graph = facebook.GraphAPI(access_token=access_token)
         self.user_id = user_id
 
-    def get_user_info(self):
+    def get_user_info(self) -> dict or None:
         fields = ','.join(field for field in self.fields)
-        user_info = self.graph.get_object(id='me',
-                                          fields=fields)
-        if 'birthday' in user_info and 'gender' in user_info and 'location' in user_info:
-            user_data = {'age': utils.birthday_to_age(user_info['birthday']),
-                         'gender': 1 if user_info['gender'] == 'male' else 0,
-                         'location': user_info['location']['id'],
-                         'id': user_info['id']}
+        user_fb_object = self.graph.get_object(id='me',
+                                               fields=fields)
+        if 'birthday' in user_fb_object and 'gender' in user_fb_object \
+                and 'location' in user_fb_object:
+            user_data = {
+                'age': utils.birthday_to_age(user_fb_object['birthday']),
+                'gender': 1 if user_fb_object['gender'] == 'male' else 0,
+                'location': user_fb_object['location']['id'],
+                'id': user_fb_object['id']
+            }
             return user_data
         else:
             return None

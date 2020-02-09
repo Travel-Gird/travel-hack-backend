@@ -95,7 +95,7 @@ def get_data_for_predict(user_facebook_id: str):
     with connection().cursor() as cursor:
         cursor.execute(f'SELECT u.user_facebook_id, age, gender, location, ro.id '
                        f'FROM users u LEFT JOIN routes ro ON true '
-                       f'LEFT JOIN rates ra ON ra.route_id = ro.id'
+                       f'LEFT JOIN rates ra ON ra.route_id = ro.id '
                        f'WHERE u.user_facebook_id = {user_facebook_id}')
         records = cursor.fetchall()
         data_for_predict = [list(record) for record in records]

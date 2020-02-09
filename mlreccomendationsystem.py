@@ -4,6 +4,8 @@ import time
 import torch
 import yaml
 
+import numpy as np
+
 from sklearn.metrics import accuracy_score
 
 from src.loader import UserDataset
@@ -40,12 +42,14 @@ class MLPlaceRecommendation:
         """
         :param config: type(string) .yaml file with parameters for model
         """
-        self.root_path = os.path.realpath(__file__)
+        self.root_path = '/'.join(os.path.realpath(__file__).split('/')[:-1])
         config_path = os.path.join(self.root_path, config)
         self.__config = self.config_load(config_path)
-        self.best_model_path = self.get_best_model_path()
-        self.model = EmbeddingClassifier(1000)
         self.device = torch.device("cuda:0")
+        self.is_model_trained = False
+        self.model = EmbeddingClassifier(self.__config['vocab_size'])
+        self.model = self.model.to(self.device)
+        self.load_best_model()
 
     @staticmethod
     def config_load(config_path: str):
@@ -59,23 +63,23 @@ class MLPlaceRecommendation:
             config = yaml.safe_load(c_file)
         return config
 
-    def get_best_model_path(self):
+    def load_best_model(self):
         """
         Best model path loader from folder - 'weights'
         :return: type(string) Path to best model, without root
         """
         weights_paths = os.listdir(os.path.join(self.root_path, 'weights'))
-        self.scores = [path.split('_').split('.') for path in weights_paths]
+        self.scores = [int(path.split('_')[2].split('.')[0]) for path in weights_paths]
         best_model_path = f'weights/model_score_{max(self.scores)}.pth'
         self.model.load_state_dict(torch.load(best_model_path))
 
     def predict(self, data):
-        self.best_model_path()
+        self.load_best_model()
         self.model.eval()
         with torch.no_grad():
-            output = self.model(torch.Tensor([data]).to(self.device))
+            output = self.model(torch.LongTensor(data).to(self.device))
             output = output.float()
-        return output.data
+        return output.cpu().detach().numpy()[:, 1]
 
     @staticmethod
     def accuracy(output, target):
@@ -199,9 +203,17 @@ class MLPlaceRecommendation:
                 k += 1
             elif k == n_rounds:
                 break
+        self.is_model_trained = True
 
     def save_model(self, state, filename):
         """
         Save the training model
         """
         torch.save(state, filename)
+
+
+if __name__ == '__main__':
+    ml_model = MLPlaceRecommendation()
+    test = [[np.random.randint(1, 100), np.random.randint(16, 60), np.random.randint(0, 2), np.random.randint(1, 100),
+             np.random.randint(1, 100)] for i in range(16)]
+    ml_model.predict(test)

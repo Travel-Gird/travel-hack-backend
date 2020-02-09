@@ -84,6 +84,19 @@ def get_data_for_study():
         return data_for_study
 
 
+def get_data_for_predict():
+    with connection().cursor() as cursor:
+        cursor.execute('SELECT u.user_facebook_id, age, gender, location, ro.id '
+                       'FROM users u LEFT JOIN routes ro ON true '
+                       'LEFT JOIN rates ra ON ra.route_id = ro.id')
+        records = cursor.fetchall()
+        data_for_predict = [list(record) for record in records]
+        return data_for_predict
+
+
+
+
+
 if __name__ == '__main__':
     # print(get_places_from_db())
     # print(get_place_from_db(1))

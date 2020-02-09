@@ -7,6 +7,7 @@ import yaml
 import numpy as np
 
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
 
 from src.loader import UserDataset
 from src.model import EmbeddingClassifier
@@ -91,7 +92,13 @@ class MLPlaceRecommendation:
 
     @staticmethod
     def get_list_from_db():
-        return db.get_data_for_study()
+        enc = LabelEncoder()
+        data = db.get_data_for_study()
+        labels = data[:, -1]
+        data = data[:, :-1]
+        data[:, 0] = enc.fit_transform(data[:, 0])
+        data[:, 3] = enc.fit_transform(data[:, 3])
+        return data, labels
 
     def train(self):
         usr_info, labels = self.get_list_from_db()

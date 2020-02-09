@@ -47,7 +47,7 @@ class MLPlaceRecommendation:
         config_path = os.path.join(self.root_path, config)
         print(config_path)
         self.__config = self.config_load(config_path)
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cpu')
         self.is_model_trained = False
         self.model = EmbeddingClassifier(self.__config['reccomendation_alg_params']['vocab_size'])
         self.model = self.model.to(self.device)

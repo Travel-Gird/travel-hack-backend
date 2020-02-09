@@ -104,5 +104,5 @@ def get_data_for_predict(user_facebook_id: str):
 
 if __name__ == '__main__':
     # print(get_places_from_db())
-    # print(get_place_from_db(1))
-    print(get_data_for_study())
+    print(get_place_from_db(113))
+    # print(get_data_for_study())

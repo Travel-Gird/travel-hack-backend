@@ -55,7 +55,9 @@ def recommend_routes(user_data: dict) -> list:
                       'cityName': f'Route #{str(i + 1)}',
                       'timeTable': []}
         for chunk in route_from_db:
+            print(chunk)
             time = chunk['time']
+            print(chunk['place_id'])
             place_data = db.get_place_from_db(chunk['place_id'])
             route_chunk = {'time': time,
                            'place': place_data['title'],

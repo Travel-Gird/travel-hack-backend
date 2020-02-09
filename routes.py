@@ -11,7 +11,11 @@ route_images = ['https://www.visittheusa.com/sites/default/files/styles/hero_m_1
                 'https://discoverportugal.ru/images/stay/porto-bairros/ribeira.jpg']
 
 
-def generate_routes(user_id: str, access_token: str, places_data: list) -> list:
+def generate_routes(user_id: str,
+                    access_token: str,
+                    places_data: list,
+                    budget: int,
+                    activity: int) -> list:
     routes = []
     for i in range(0, 5):
         random.shuffle(places_data)
@@ -38,7 +42,9 @@ def generate_routes(user_id: str, access_token: str, places_data: list) -> list:
                           access_token=access_token)
     user_fb_data = user_fb.get_user_info()
     if user_fb_data is not None:
-        db.save_user_to_db(user_fb_data)
+        db.save_user_to_db(user_fb_data=user_fb_data,
+                           budget=budget,
+                           activity=activity)
     return routes
 
 

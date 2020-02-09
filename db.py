@@ -70,7 +70,7 @@ def rate_route_in_db(user_facebook_id: int, route_id: int):
         conn.commit()
 
 
-def save_user_to_db(user_data: dict):
+def save_user_to_db(user_fb_data: dict, budget: int, activity: int):
     conn = psycopg2.connect(dbname=config.DB_NAME,
                             user=config.DB_USER,
                             password=config.DB_PASSWORD,
@@ -79,9 +79,13 @@ def save_user_to_db(user_data: dict):
                             cursor_factory=RealDictCursor)
     with conn.cursor() as cursor:
         cursor.execute(
-            f"INSERT INTO users (user_facebook_id, age, gender, location) "
-            f"VALUES ({str(user_data['id'])}, {str(user_data['age'])}, {str(user_data['gender'])},"
-            f"{str(user_data['location'])})")
+            f"INSERT INTO users (user_facebook_id, age, gender, location, budget, activity) "
+            f"VALUES ({str(user_fb_data['id'])}, {str(user_fb_data['age'])}, {str(user_fb_data['gender'])},"
+            f"{str(user_fb_data['location'])}, {str(config.BUDGETS[budget])},"
+            f"{str(config.ACTIVITIES[activity])}) ON CONFLICT (user_facebook_id) DO UPDATE SET "
+            f"age = {str(user_fb_data['age'])},"
+            f"gender = {str(user_fb_data['gender'])}, location = {str(user_fb_data['location'])},"
+            f"budget = {str(config.ACTIVITIES[activity])}, activity = {str(config.BUDGETS[budget])}")
         conn.commit()
 
 

@@ -19,7 +19,9 @@ def get_routes_endpoint():
         request_data = request.args
         response_data = routes.generate_routes(user_id=request_data['userId'],
                                                access_token=request_data['token'],
-                                               places_data=request_data.getlist('sightsigns'))
+                                               places_data=request_data.getlist('sightsigns'),
+                                               budget=request_data['budjet'],
+                                               activity=request_data['activity'])
         return jsonify({'routes': response_data}), 200
     elif request.method == 'POST':
         request_data = request.json

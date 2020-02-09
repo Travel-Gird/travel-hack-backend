@@ -27,7 +27,7 @@ class UserDataset(data.Dataset):
         user_info = self.list_of_users[index]
 
         # Load data and get label
-        X = torch.Tensor(user_info)
-        y = torch.Tensor(self.labels[index])
+        X = torch.LongTensor(user_info)
+        y = torch.LongTensor(self.labels[index])
 
         return X, y

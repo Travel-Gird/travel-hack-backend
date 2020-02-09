@@ -46,9 +46,9 @@ class MLPlaceRecommendation:
         self.root_path = '/'.join(os.path.realpath(__file__).split('/')[:-1])
         config_path = os.path.join(self.root_path, config)
         self.__config = self.config_load(config_path)
-        self.device = torch.device("cuda:0")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
         self.is_model_trained = False
-        self.model = EmbeddingClassifier(self.__config['vocab_size'])
+        self.model = EmbeddingClassifier(self.__config['reccomendation_alg_params']['vocab_size'])
         self.model = self.model.to(self.device)
         self.load_best_model()
 
@@ -114,9 +114,9 @@ class MLPlaceRecommendation:
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=3,
                                                                verbose=False)
 
-        log_interval = self.__config['log_interval']
-        max_epoch = self.__config['MAX_EPOCH']
-        n_rounds = self.__config['n_rounds']
+        log_interval = self.__config['reccomendation_alg_params']['log_interval']
+        max_epoch = self.__config['reccomendation_alg_params']['MAX_EPOCH']
+        n_rounds = self.__config['reccomendation_alg_params']['n_rounds']
 
         k = 0
         best_score = 0

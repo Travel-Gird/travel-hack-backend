@@ -8,6 +8,7 @@ from sklearn.metrics import accuracy_score
 
 from src.loader import UserDataset
 from src.model import EmbeddingClassifier
+import db
 
 
 class AverageMeter(object):
@@ -84,8 +85,9 @@ class MLPlaceRecommendation:
             target = target.cpu().detach().numpy()
             return [accuracy_score(output, target)]
 
-    def get_list_from_db(self):
-        pass
+    @staticmethod
+    def get_list_from_db():
+        return db.get_data_for_study()
 
     def train(self):
         usr_info, labels = self.get_list_from_db()

@@ -38,7 +38,7 @@ def get_routes_endpoint():
 def get_recommended_routes_endpoint():
     request_data = request.args
     response_data = routes.recommend_routes(user_data=request_data)
-    return jsonify({'recommended_routes': response_data}), 200
+    return jsonify({'routes': response_data}), 200
 
 
 if __name__ == '__main__':

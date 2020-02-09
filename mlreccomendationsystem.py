@@ -5,6 +5,7 @@ import torch
 import yaml
 
 import numpy as np
+import pandas as pd
 
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
@@ -78,10 +79,18 @@ class MLPlaceRecommendation:
     def predict(self, data):
         self.load_best_model()
         self.model.eval()
+        enc = LabelEncoder()
+        data = np.array(data)
+        data[:, 0] = enc.fit_transform(data[:, 0])
+        data[:, 3] = enc.fit_transform(data[:, 3])
         with torch.no_grad():
             output = self.model(torch.LongTensor(data).to(self.device))
             output = output.float()
-        return output.cpu().detach().numpy()[:, 1]
+        result = output.cpu().detach().numpy()[:, 1].reshape(-1, 1)
+        result = np.hstack((data[:, 4].reshape(-1, 1), result))
+        df = pd.DataFrame(result)
+        df = df.sort_values(by=[1], ascending=False)
+        return df.head(5)[0].values
 
     @staticmethod
     def accuracy(output, target):
@@ -223,5 +232,5 @@ class MLPlaceRecommendation:
 if __name__ == '__main__':
     ml_model = MLPlaceRecommendation()
     test = [[np.random.randint(1, 100), np.random.randint(16, 60), np.random.randint(0, 2), np.random.randint(1, 100),
-             np.random.randint(1, 100)] for i in range(16)]
-    ml_model.predict(test)
+             np.random.randint(1, 100)] for i in range(100)]
+    print(ml_model.predict(test))

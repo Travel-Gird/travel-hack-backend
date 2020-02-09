@@ -17,6 +17,7 @@ def generate_routes(places_data: list) -> list:
     routes = []
     for i in range(0, 5):
         random.shuffle(places_data)
+        random.shuffle(route_images)
         hours = 8
         route_data = {'image': route_images[i],
                       'cityName': f'Route #{str(i + 1)}',
@@ -45,6 +46,7 @@ def rate_route(user_facebook_id: int, route_id: int):
 
 
 def recommend_routes(user_data: dict) -> list:
+    random.shuffle(route_images)
     data_for_predict = db.get_data_for_predict(user_data['userId'])
     predict_data = predictor.predict(data_for_predict)
     routes = []

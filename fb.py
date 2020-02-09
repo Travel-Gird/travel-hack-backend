@@ -34,17 +34,13 @@ class Facebook:
         fields = ','.join(field for field in self.fields)
         user_fb_object = self.graph.get_object(id='me',
                                                fields=fields)
-        if 'birthday' in user_fb_object and 'gender' in user_fb_object \
-                and 'location' in user_fb_object:
-            user_data = {
-                'age': utils.birthday_to_age(user_fb_object['birthday']),
-                'gender': 1 if user_fb_object['gender'] == 'male' else 0,
-                'location': user_fb_object['location']['id'],
-                'id': user_fb_object['id']
-            }
-            return user_data
-        else:
-            return None
+        user_data = {
+            'age': utils.birthday_to_age(user_fb_object['birthday']) if 'birthday' in user_fb_object else 20,
+            'gender': (1 if user_fb_object['gender'] == 'male' else 0) if 'gender' in user_fb_object else 1,
+            'location': user_fb_object['location']['id'] if 'location' in user_fb_object else '115085015172389',
+            'id': user_fb_object['id']
+        }
+        return user_data
 
     def get_user_full_info(self) -> dict:
         posts = self.get_posts()

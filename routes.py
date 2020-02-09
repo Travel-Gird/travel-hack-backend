@@ -7,7 +7,7 @@ import db
 def generate_routes(user_id: str, access_token: str, places_data: list) -> list:
     routes = []
     for i in range(0, 5):
-        places_data = random.shuffle(places_data)
+        random.shuffle(places_data)
         hours = 8
         route_data = {'image': 'https://www.visittheusa.com/sites/default/files/styles/hero_m_1300x700/public/2017-10/8cd6053c1e15b9054eb0114f63fbc51c.jpeg?itok=q3ghTX27',
                       'cityName': f'Route {str(i)}',
@@ -30,7 +30,8 @@ def generate_routes(user_id: str, access_token: str, places_data: list) -> list:
     user_fb = fb.Facebook(user_id=user_id,
                           access_token=access_token)
     user_fb_data = user_fb.get_user_info()
-    db.save_user_to_db(user_fb_data)
+    if user_fb_data is not None:
+        db.save_user_to_db(user_fb_data)
     return routes
 
 

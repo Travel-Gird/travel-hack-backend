@@ -78,6 +78,7 @@ class MLPlaceRecommendation:
     def predict(self, data):
         self.load_best_model()
         self.model.eval()
+        data = np.array(data)
         enc = LabelEncoder()
         data[:, 0] = enc.fit_transform(data[:, 0])
         data[:, 3] = enc.fit_transform(data[:, 3])

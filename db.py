@@ -94,9 +94,6 @@ def get_data_for_predict():
         return data_for_predict
 
 
-
-
-
 if __name__ == '__main__':
     # print(get_places_from_db())
     # print(get_place_from_db(1))

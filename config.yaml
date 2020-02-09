@@ -1,0 +1,8 @@
+reccomendation_alg_params:
+  log_interval: 1
+  MAX_EPOCH: 5
+  n_rounds: 2
+
+model:
+  version: 0.0.1
+  weights_default_path: 'weights/something.pkl'

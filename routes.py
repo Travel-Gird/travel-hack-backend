@@ -2,6 +2,7 @@ import random
 
 import fb
 import db
+from mlreccomendationsystem import MLPlaceRecommendation
 
 
 route_images = ['https://www.visittheusa.com/sites/default/files/styles/hero_m_1300x700/public/2017-10/8cd6053c1e15b9054eb0114f63fbc51c.jpeg?itok=q3ghTX27',
@@ -9,6 +10,7 @@ route_images = ['https://www.visittheusa.com/sites/default/files/styles/hero_m_1
                 'https://mandruy.com/wp-content/uploads/2019/10/Old-town-at-the-Obermarkt-in-the-historical-old-town-of-city-768x367.jpg',
                 'https://apn-nn.com/upload/iblock/8fc/8fc771bebbd74db1ca0c670b55d90bb1.jpg',
                 'https://discoverportugal.ru/images/stay/porto-bairros/ribeira.jpg']
+predictor = MLPlaceRecommendation()
 
 
 def generate_routes(places_data: list) -> list:
@@ -43,7 +45,13 @@ def rate_route(user_facebook_id: int, route_id: int):
 
 
 def recommend_routes(user_data: dict) -> dict:
-    user_fb = fb.Facebook(access_token=user_data['access_token'],
-                          user_id=user_data['user_id'])
-    routes_data = {}
-    return routes_data
+    # user_fb = fb.Facebook(access_token=user_data['access_token'],
+    #                       user_id=user_data['user_id'])
+    data_for_predict = db.get_data_for_predict()
+    predict_data = predictor.predict(data_for_predict)
+    # routes_data = {}
+    return predict_data
+
+
+if __name__ == '__main__':
+    print(recommend_routes({}))

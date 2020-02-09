@@ -48,8 +48,8 @@ def recommend_routes(user_data: dict) -> dict:
     # user_fb = fb.Facebook(access_token=user_data['access_token'],
     #                       user_id=user_data['user_id'])
     data_for_predict = db.get_data_for_predict()
-    print(data_for_predict)
-    predict_data = predictor.predict(data_for_predict)
+    print(data_for_predict[:16])
+    predict_data = predictor.predict(data_for_predict[:16])
     # routes_data = {}
     return predict_data
 

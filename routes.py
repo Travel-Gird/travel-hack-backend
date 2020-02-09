@@ -68,4 +68,4 @@ def recommend_routes(user_data: dict) -> list:
 
 
 if __name__ == '__main__':
-    print(recommend_routes({}))
+    print(recommend_routes({'userId': '658680284869831'}))

@@ -15,8 +15,8 @@ predictor = MLPlaceRecommendation()
 
 def generate_routes(city_id: int, places_data: list) -> list:
     routes = []
+    random.shuffle(places_data)
     for i in range(0, 5):
-        random.shuffle(places_data)
         random.shuffle(route_images)
         hours = 8
         route_data = {'image': route_images[i],

@@ -52,6 +52,7 @@ def recommend_routes(user_data: dict) -> list:
     for route_id in predict_data:
         route_from_db = db.get_route_from_db(route_id)
         route_data = {'image': route_images[i],
+                      'id': str(route_id),
                       'cityName': f'Route #{str(i + 1)}',
                       'timeTable': []}
         for chunk in route_from_db:

@@ -44,14 +44,27 @@ def rate_route(user_facebook_id: int, route_id: int):
                         route_id=route_id)
 
 
-def recommend_routes(user_data: dict) -> dict:
-    # user_fb = fb.Facebook(access_token=user_data['access_token'],
-    #                       user_id=user_data['user_id'])
-    data_for_predict = db.get_data_for_predict()
-    print(data_for_predict)
+def recommend_routes(user_data: dict) -> list:
+    data_for_predict = db.get_data_for_predict(user_data['userId'])
     predict_data = predictor.predict(data_for_predict)
-    # routes_data = {}
-    return predict_data
+    routes = []
+    i = 0
+    for route_id in predict_data:
+        route_from_db = db.get_route_from_db(route_id)
+        route_data = {'image': route_images[i],
+                      'cityName': f'Route #{str(i + 1)}',
+                      'timeTable': []}
+        for time, place_id in route_from_db['timeline'].items():
+            place_data = db.get_place_from_db(place_id)
+            route_chunk = {'time': time,
+                           'place': place_data['title'],
+                           'description': place_data['description'],
+                           'latitude': str(place_data['latitude']),
+                           'longitude': str(place_data['longitude'])}
+            route_data['timeTable'].append(route_chunk)
+        i += 1
+        routes.append(route_data)
+    return routes
 
 
 if __name__ == '__main__':

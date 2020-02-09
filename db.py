@@ -73,6 +73,13 @@ def save_user_to_db(user_fb_id: str,
             f"budget = {activity}, activity = {budget}")
 
 
+def get_route_from_db(route_id: int):
+    with connection().cursor(cursor_factory=RealDictCursor) as cursor:
+        cursor.execute(f'SELECT * FROM routes WHERE id = {route_id}')
+        timeline = cursor.fetchone()['timeline']
+        return timeline
+
+
 def get_data_for_study():
     with connection().cursor() as cursor:
         cursor.execute('SELECT u.user_facebook_id, age, gender, location, ro.id, '
@@ -84,11 +91,12 @@ def get_data_for_study():
         return data_for_study
 
 
-def get_data_for_predict():
+def get_data_for_predict(user_facebook_id: str):
     with connection().cursor() as cursor:
-        cursor.execute('SELECT u.user_facebook_id, age, gender, location, ro.id '
-                       'FROM users u LEFT JOIN routes ro ON true '
-                       'LEFT JOIN rates ra ON ra.route_id = ro.id')
+        cursor.execute(f'SELECT u.user_facebook_id, age, gender, location, ro.id '
+                       f'FROM users u LEFT JOIN routes ro ON true '
+                       f'LEFT JOIN rates ra ON ra.route_id = ro.id'
+                       f'WHERE u.user_facebook_id = {user_facebook_id}')
         records = cursor.fetchall()
         data_for_predict = [list(record) for record in records]
         return data_for_predict

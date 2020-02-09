@@ -97,7 +97,7 @@ def get_data_for_predict(user_facebook_id: str, city_id: int):
                        f'FROM users u LEFT JOIN routes ro ON true '
                        f'LEFT JOIN rates ra ON ra.route_id = ro.id '
                        f'WHERE u.user_facebook_id = {user_facebook_id} '
-                       f'AND city_id = {city_id}')
+                       f'AND ro.city_id = {city_id}')
         records = cursor.fetchall()
         data_for_predict = [list(record) for record in records]
         return data_for_predict
